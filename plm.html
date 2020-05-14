@@ -12,14 +12,14 @@ install.packages("rattle")
 
 set.seed(1234)
 
-#Load the testing and trainind dataset
+#Load the testing and training dataset
 
 training <- read.csv("C:/Users/sharanya/Downloads/pml-training.csv", na.strings=c("NA","#DIV/0!",""))
 testing <- read.csv("C:/Users/sharanya/Downloads/pml-testing.csv", na.strings=c("NA","#DIV/0!",""))
 
-# Create the partition of data with 60% training set and 40% testing set
+# Create the 10 fold cross validation with repetitions
 
-inTrain <- createDataPartition(y=training$classe, p=0.6, list=FALSE)
+train_control <- trainControl(method="repeatedcv", number=10, repeats=3)
 
 # check the dimensions of testing and training set
            
@@ -27,10 +27,10 @@ myTraining <- training[inTrain, ];
 myTesting <- training[-inTrain, ]
 dim(myTraining); 
 dim(myTesting)
-
+             
 # Eliminate the near to zero values from every column as they may not be much useful
              
-myDataNZV <- nearZeroVar(myTraining, saveMetrics=TRUE)
+myDataNZV <- neartrain.control <- trainControl(method = "cv", number = 10)ZeroVar(myTraining, saveMetrics=TRUE)
 myNZVvars <- names(myTraining) %in% c("new_window", "kurtosis_roll_belt", "kurtosis_picth_belt",
 + "kurtosis_yaw_belt", "skewness_roll_belt", "skewness_roll_belt.1", "skewness_yaw_belt",
 + "max_yaw_belt", "min_yaw_belt", "amplitude_yaw_belt", "avg_roll_arm", "stddev_roll_arm",
@@ -89,11 +89,11 @@ testing <- rbind(myTraining[2, -58] , testing)
 testing <- testing[-1,]
            
 # fit the model named A1 that does predictions. This is a model with no specific machine learning algorithm. This is built with just a call to predict()
-modFitA1 <- rpart(classe ~ ., data=myTraining, method="class")
-predictionsA1 <- predict(modFitA1, myTesting, type = "class")
+modFitA1 <- rpart(classe ~ ., data=train.control, method="class")
+predictionsA1 <- predict(modFitA1, train.control, type = "class")
                  
 # display the predictions using confusion matrix
-confusionMatrix(predictionsA1, myTesting$classe)
+confusionMatrix(predictionsA1, train.control$classe)
                  
    Reference
    Prediction    A    B    C    D    E
@@ -131,11 +131,11 @@ library(randomForest)
 randomForest
 
 # Fit the random forest model             
-modFitB1 <- randomForest(classe ~. , data=myTraining)
-predictionsB1 <- predict(modFitB1, myTesting, type = "class")
+modFitB1 <- randomForest(classe ~. , data=train.control)
+predictionsB1 <- predict(modFitB1, train.control, type = "class")
          
 # Display the confusion matrix           
-confusionMatrix(predictionsB1, myTesting$classe)
+confusionMatrix(predictionsB1, train.control$classe)
 
 Confusion Matrix and Statistics
 
