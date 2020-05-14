@@ -42,9 +42,13 @@ training<- read.csv("D:/PMLC/pml-training.csv", na.strings=c("NA","#DIV/0!",""))
  testing <- read.csv("D:/PMLC/pml-testing.csv", na.strings=c("NA","#DIV/0!",""))
 ```
 ```{r}
-#Create testing and training as 60-20. apply crossvalidation
+#Create testing and training as 60-20. 
 inTrain<- createDataPartition(y=training$classe, p=0.6, list=FALSE)
-myTraining<- training[inTrain, ]; myTesting<- training[-inTrain, ]
+mTraining<- training[inTrain, ]
+myTesting<- training[-inTrain, ]
+
+#apply 10 fold cross crossvalidation to training
+myTraining <- trainControl(method = "cv", number = 10)
 dim(myTraining);
 11776   160
 dim(myTesting);
