@@ -48,7 +48,9 @@ mTraining<- training[inTrain, ]
 myTesting<- training[-inTrain, ]
 
 #apply 10 fold cross crossvalidation to training
-myTraining <- trainControl(method = "cv", number = 10)
+train.control <- trainControl(method = "cv", number = 10, repetitions=3)
+
+
 dim(myTraining);
 11776   160
 dim(myTesting);
@@ -117,11 +119,11 @@ for (i in 1:length(testing) ) {
 testing <- testing[-1,]
 
 #Fit the model and make predictions
-modFitA1 <- rpart(classe ~ ., data=myTraining, method="class")
- predictionsA1 <- predict(modFitA1, myTesting, type = "class")
+modFitA1 <- rpart(classe ~ ., data=train.contol, method="class")
+ predictionsA1 <- predict(modFitA1, train.contol, type = "class")
  
  #estimate the models performance throygh its confusion matrix
- confusionMatrix(predictionsA1, myTesting$classe)
+ confusionMatrix(predictionsA1, train.contol$classe)
 Confusion Matrix and Statistics
 
           Reference
@@ -164,11 +166,11 @@ The following object is masked from ‘package:ggplot2’:
 margin
 
  # Fit the model
- modFitB1 <- randomForest(classe ~. , data=myTraining)
-predictionsB1 <- predict(modFitB1, myTesting, type = "class")
+ modFitB1 <- randomForest(classe ~. , data=train.control)
+predictionsB1 <- predict(modFitB1, train.control, type = "class")
 
 #Evaluate the performance by random forest
-confusionMatrix(predictionsB1, myTesting$classe)
+confusionMatrix(predictionsB1, train.control$classe)
 Confusion Matrix and Statistics
 
           Reference
